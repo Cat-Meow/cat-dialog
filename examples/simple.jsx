@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import Dialog from '../src/dialog.js';
 
-class Example extends Component {
+export default class Example extends Component {
     state = {
         show: false,
         tabshow: false
@@ -40,5 +39,3 @@ class Example extends Component {
         );
     }
 }
-
-ReactDOM.render(<Example />, document.getElementById('component-example-simple'));
