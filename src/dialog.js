@@ -4,6 +4,13 @@ import Header from './header';
 import Footer from './footer';
 import { keyCode } from 'cat-util';
 
+const SIZE = {
+            'auto': 'auto',
+            'large': 'lg',
+            'medium': '',
+            'small': 'sm'
+        };
+
 export default class Dialog extends Component {
     static propTypes = {
         show: React.PropTypes.bool,
@@ -15,6 +22,7 @@ export default class Dialog extends Component {
         noButtons: React.PropTypes.bool,
         autoClose: React.PropTypes.bool
     }
+
     static defaultProps = {
         show: false,
         toBody: true,
@@ -28,42 +36,9 @@ export default class Dialog extends Component {
         autoClose: true
     }
 
-    constructor(props) {
-        super(props);
-        this.size = {
-            'auto': 'auto',
-            'large': 'lg',
-            'medium': '',
-            'small': 'sm'
-        }
-    }
-
     _handleClose(event) {
         if (event.target.className == 'modal fade in' && this.props.autoClose) {
             this.props.onClose();
-        }
-    }
-
-    state = {
-        show: this.props.show
-    }
-
-    render() {
-        if (this.props.show) {
-            this.rendered = true;
-        }
-        return this.props.toBody ? null : (this.rendered ? this._renderDialog() : null);
-    }
-
-    componentDidUpdate() {
-        if (this.props.toBody && this.rendered) {
-            ReactDOM.render(this._renderDialog(), this._getDialogContainer());
-        }
-    }
-
-    componentWillUnmount() {
-        if (this.dialogContainer) {
-            this._cleanDialogContainer();
         }
     }
 
@@ -86,51 +61,52 @@ export default class Dialog extends Component {
 
     // 生成主要内容
     _renderDialog() {
-        let { mySize, show, title, noCloseButton, onClose, buttons, noButtons } = this.props,
-            divStyle={
-                display: show ? 'block' : 'none'
-            },
-            className = `modal-dialog modal-${this.size[mySize]}`;
+        let { mySize, show, title, noCloseButton, onClose, buttons, noButtons } = this.props;
 
         return (
             <div className="modal-open">
-                <div
-                    className="modal fade in"
-                    style={divStyle}
-                    onClick={this::this._handleClose}
-                >
-                    <div className={className}>
-                        <div className="modal-content">
-                            <Header
-                                title={title}
-                                noCloseButton={noCloseButton}
-                                onClose={onClose}
-                            />
-                            <div className="modal-body">
-                                {this.props.children}
+                {
+                    show &&
+                    [
+                        <div className="modal fade in" onClick={this::this._handleClose} key="body" style={{display: 'block'}}>
+                            <div className={`modal-dialog modal-${SIZE[mySize]}`}>
+                                <div className="modal-content">
+                                    <Header
+                                        title={title}
+                                        noCloseButton={noCloseButton}
+                                        onClose={onClose}
+                                    />
+                                    <div className="modal-body">
+                                        {this.props.children}
+                                    </div>
+                                    { !noButtons && <Footer buttons={buttons} onClose={onClose} /> }
+                                </div>
                             </div>
-                            <Footer
-                                buttons={buttons}
-                                onClose={onClose}
-                                noButtons={noButtons}
-                            />
-                        </div>
-                    </div>
-                </div>
-                {this._renderBackdrop()}
+                        </div>,
+                        <div className="modal-backdrop fade in" key="fade"/>
+                    ]
+                }
             </div>
         );
     }
 
+    render() {
+        if (this.props.show) {
+            this.rendered = true;
+        }
+        return this.props.toBody ? null : (this.rendered ? this._renderDialog() : null);
+    }
 
-    // 生成背景
-    _renderBackdrop() {
-        let { show, onClose } = this.props,
-            divStyle={
-                display: show ? 'block' : 'none'
-            };
-        return (
-            <div className="modal-backdrop fade in" style={divStyle}></div>
-        );
+    // 如果追加到body后，每次Update后会更改render的目标节点
+    componentDidUpdate() {
+        if (this.props.toBody && this.rendered) {
+            ReactDOM.render(this._renderDialog(), this._getDialogContainer());
+        }
+    }
+
+    componentWillUnmount() {
+        if (this.dialogContainer) {
+            this._cleanDialogContainer();
+        }
     }
 }
