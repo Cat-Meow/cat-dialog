@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import Header from './header';
 import Footer from './footer';
-import { keyCode } from 'cat-util';
+import { keyCode } from 'rs-util';
 
 const SIZE = {
             'auto': 'auto',

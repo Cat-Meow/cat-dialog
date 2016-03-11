@@ -1,4 +1,4 @@
-# Cat-Dialog
+# React Salt Dialog
 弹出框组件
 
 buttons需要传递对象数组，每个对象的name属性将会作为buttons的显示文字，onClick方法可以绑定回调，若不设定，则自动设置成onClose所对应的方法
