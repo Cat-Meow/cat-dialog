@@ -36,14 +36,19 @@ export default class Dialog extends Component {
         autoClose: true
     }
 
-    _handleClose(event) {
+    constructor(props) {
+        super(props);
+        this.handleClose = this.handleClose.bind(this);
+    }
+
+    handleClose(event) {
         if (event.target.className == 'modal fade in' && this.props.autoClose) {
             this.props.onClose();
         }
     }
 
     // 生成外部结构
-    _getDialogContainer() {
+    getDialogContainer() {
         if (!this.dialogContainer) {
             this.dialogContainer = document.createElement('div');
             this.dialogContainer.className = 'my-dialog-container';
@@ -53,14 +58,14 @@ export default class Dialog extends Component {
     }
 
     // 清除节点
-    _cleanDialogContainer() {
-        React.unmountComponentAtNode(this._getDialogContainer());
+    cleanDialogContainer() {
+        React.unmountComponentAtNode(this.getDialogContainer());
         document.body.removeChild(this.dialogContainer);
         this.dialogContainer = null;
     }
 
     // 生成主要内容
-    _renderDialog() {
+    renderDialog() {
         let { mySize, show, title, noCloseButton, onClose, buttons, noButtons } = this.props;
 
         return (
@@ -68,7 +73,7 @@ export default class Dialog extends Component {
                 {
                     show &&
                     [
-                        <div className="modal fade in" onClick={this::this._handleClose} key="body" style={{display: 'block'}}>
+                        <div className="modal fade in" onClick={this.handleClose} key="body" style={{display: 'block'}}>
                             <div className={`modal-dialog modal-${SIZE[mySize]}`}>
                                 <div className="modal-content">
                                     <Header
@@ -94,19 +99,20 @@ export default class Dialog extends Component {
         if (this.props.show) {
             this.rendered = true;
         }
-        return this.props.toBody ? null : (this.rendered ? this._renderDialog() : null);
+
+        return !this.props.toBody && this.rendered && this.renderDialog();
     }
 
     // 如果追加到body后，每次Update后会更改render的目标节点
     componentDidUpdate() {
         if (this.props.toBody && this.rendered) {
-            ReactDOM.render(this._renderDialog(), this._getDialogContainer());
+            ReactDOM.render(this.renderDialog(), this.getDialogContainer());
         }
     }
 
     componentWillUnmount() {
         if (this.dialogContainer) {
-            this._cleanDialogContainer();
+            this.cleanDialogContainer();
         }
     }
 }

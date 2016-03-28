@@ -25,12 +25,13 @@ export default class Example extends Component {
             <div>
                 <button
                     onClick={this.On.bind(this)}
+                    className="btn btn-primary"
                 >
                     开启
                 </button>
                 <Dialog
                     show={this.state.show}
-                    title={null}
+                    title='标题'
                     onClose={this.Cn.bind(this)}
                 >
                     <p>测试</p>

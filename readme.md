@@ -3,6 +3,8 @@
 
 buttons需要传递对象数组，每个对象的name属性将会作为buttons的显示文字，onClick方法可以绑定回调，若不设定，则自动设置成onClose所对应的方法
 
+可以通过toBody制定生成的弹出框父节点对象，以限定特殊条件下的弹出框表现。
+
 ## API
 
 Props属性如下
