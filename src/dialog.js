@@ -13,6 +13,7 @@ const SIZE = {
 
 export default class Dialog extends Component {
     static propTypes = {
+        className: React.PropTypes.string,
         show: React.PropTypes.bool,
         toBody: React.PropTypes.bool,
         mySize: React.PropTypes.string,
@@ -20,10 +21,11 @@ export default class Dialog extends Component {
         noCloseButton: React.PropTypes.bool,
         buttons: React.PropTypes.array,
         noButtons: React.PropTypes.bool,
-        autoClose: React.PropTypes.bool
+        autoClose: React.PropTypes.bool,
     }
 
     static defaultProps = {
+        className: '',
         show: false,
         toBody: true,
         mySize: 'medium',
@@ -66,10 +68,10 @@ export default class Dialog extends Component {
 
     // 生成主要内容
     renderDialog() {
-        let { mySize, show, title, noCloseButton, onClose, buttons, noButtons } = this.props;
+        let { className, mySize, show, title, noCloseButton, onClose, buttons, noButtons } = this.props;
 
         return (
-            <div className="modal-open">
+            <div className={`modal-open ${className}`}>
                 {
                     show &&
                     [

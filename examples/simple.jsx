@@ -33,6 +33,7 @@ export default class Example extends Component {
                     show={this.state.show}
                     title='标题'
                     onClose={this.Cn.bind(this)}
+                    className="ui-test"
                 >
                     <p>测试</p>
                 </Dialog>
